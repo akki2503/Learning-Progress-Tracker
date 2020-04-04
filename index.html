@@ -1,39 +1,98 @@
+<!DOCTYPE html>
 <html>
-	<head>
-		<style type="text/css">
-			body{font-family: sans-serif;}
-			p{display: inline-block;}
-			img{display: block;}
-			.container{width: 90%;position absolute;margin: auto;}
-			.title{position: relative;width: 90%;margin: auto;text-align: center;font-weight: bold;font-size: 18px;padding: 1%;}
-			.section{position: relative;width: 90%;margin: auto;padding: 2%;}
-			.subsection{position: relative; width: 98%;text-align: justify;padding: 10px;}
-			.heading{position: relative; width: 98%;text-align: left;font-size: 14px;font-weight: bold;}
-			.text{width: 95%;font-size: 12px;text-align: justify;padding: 10px 0px 10px 0px;}
-			.authors{position: relative;width: 80%;margin: auto;padding: 2%;font-style: italic;text-align: center;font-size: 12px;}
-			.image{width: 95%;font-size: 12px;text-align: left;}
-		</style>
-	</head>
-	<body>
-		<div class="container">
-			<div class="title">Track your Progress</div>
-			
-			<div class="section">
-				<div class="heading">Abstract</div>
-				<div class="text">
+<head>
+    <title>Save form Data in a Text File using JavaScript</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+    	div {
+            padding: 10px;
+            background-color: #f6f6f6;
+            overflow: hidden;
+        }
+    	input[type=text], textarea, select {
+            font: 17px Calibri;
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        input[type=button]{ 
+            font: 17px Calibri;
+            width: auto;
+            float: right;
+            cursor: pointer;
+            padding: 7px;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        
+        <!--Add few elements to the form-->
 
-					<!-- Start edit here  -->
-					Update the steps you have completed and track your progress as you move forward to be
-					the best in the field.
-					<!-- Stop edit here -->
+        <div>
+            <input type="text" id="txtName" placeholder="Enter your name" />
+        </div>
+        <div>
+            <input type="text" id="txtAge" placeholder="Enter your age" />
+        </div>
+        <div>
+            <input type="text" id="txtEmail" placeholder="Enter your email address" />
+        </div>
+        <div>
+            <select id="selCountry">
+                <option selected value="">-- Choose the country --</option>
+                <option value="India">India</option>
+                <option value="Japan">Japan</option>
+                <option value="USA">USA</option>
+            </select>
+        </div>
+        <div>
+            <textarea id="msg" name="msg" placeholder="Write some message ..." style="height:100px"></textarea>
+        </div>
+        <div>
+            <input type="button" id="bt" value="Save data to file" onclick="saveFile()" />
+        </div>
 
-				</div>
-			</div>
-		</div>
+    </div>
+</body>
+<script>
+    let saveFile = () => {
+    	
+        // Get the data from each element on the form.
+    	const name = document.getElementById('txtName');
+        const age = document.getElementById('txtAge');
+        const email = document.getElementById('txtEmail');
+        const country = document.getElementById('selCountry');
+        const msg = document.getElementById('msg');
+        
+        // This variable stores all the data.
+        let data = 
+            '\r Name: ' + name.value + ' \r\n ' + 
+            'Age: ' +age.value + ' \r\n ' + 
+            'Email: ' + email.value + ' \r\n ' + 
+            'Country: ' + country.value + ' \r\n ' + 
+            'Message: ' + msg.value;
+        
+        // Convert the text to BLOB.
+        const textToBLOB = new Blob([data], { type: 'text/plain' });
+        const sFileName = 'formData.txt';	   // The file to save the data.
 
-		<p>Phase 1</p>
-		<form action="/phase-1-progress">
-			<label for="step-1"><input id="step-1" type="checkbox" name="phase-1"> Numpy essentials </label><br>
-			<label for="step-2"><input id="step-2" type="checkbox" name="phase-1"> Programming Assignments </label><br>
-		</form>
-	</body>
+        let newLink = document.createElement("a");
+        newLink.download = sFileName;
+
+        if (window.webkitURL != null) {
+            newLink.href = window.webkitURL.createObjectURL(textToBLOB);
+        }
+        else {
+            newLink.href = window.URL.createObjectURL(textToBLOB);
+            newLink.style.display = "none";
+            document.body.appendChild(newLink);
+        }
+
+        newLink.click(); 
+    }
+</script>
+</html>
